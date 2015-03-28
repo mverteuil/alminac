@@ -1,4 +1,4 @@
-Contributing to Alminac
+# Contributing to Alminac
 
 :+1: Firstly, thanks for reading this document. It's a good sign that you have
 the right kind of attitude for a person who contributes to this project.
