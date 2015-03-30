@@ -3,8 +3,7 @@
 :+1: Firstly, thanks for reading this document. It's a good sign that you have
 the right kind of attitude for a person who contributes to this project.
 
-Thanks for your interest in improving Alminac. Here are some points to get you
-started:
+Here are some points to get you started:
 
 1. The main branch is `master`. The `master` branch is reserved for deployable
    code and nothing that isn't deployable belongs there.
