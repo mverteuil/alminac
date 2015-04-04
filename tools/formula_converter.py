@@ -39,9 +39,8 @@ else:
         with open(input_filename, 'rU') as input_file:
             input_stream = input_file.readlines()
     except IndexError:
-        # If that doesn't exist, load the contents of the formula extraction script into a list
-        with open('formulae.txt', 'r') as extracted_formulae:
-            input_stream = extracted_formulae.readlines()
+        print "Expected line data on stdin or a filename argument."
+        sys.exit(1)
 
 
 # Match and normalize the input stream lines into a common format
