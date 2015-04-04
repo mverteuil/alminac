@@ -26,21 +26,21 @@ def parse_ingrendient_and_normalize(ingredient_string):
                       'metadata': None}
     return ingredient
 
+# Load the contents of the formula extraction script into a list
+with open('formulae.txt', 'r') as extracted_formulae:
+    formulae_lines = extracted_formulae.readlines()
 
+# Match and normalize the formula lines into a common format
+FORMULA_MATCHERS = (recipe_form_pattern, shapeless_recipe_form_pattern, )
 formulae = []
-if __name__ == '__main__':
-    with open('recipes.txt', 'r') as recipe_file:
-        recipe_lines = recipe_file.readlines()
-    for recipe_line in recipe_lines:
-        match = recipe_form_pattern.search(recipe_line)
-        if match:
-            formulae.append(match.groupdict())
+for formula_line in formulae_lines:
+    for formula_matcher in FORMULA_MATCHERS:
+        if formula_matcher.match(formula_line):
+            formulae.append(formula_matcher.match(formula_line).groupdict())
         else:
-            match = shapeless_recipe_form_pattern.search(recipe_line)
-            if match:
-                formulae.append(match.groupdict())
+            continue
 
-
+# Perform secondary reshaping of data into entirely normalized format
 for formula in formulae:
     formula['form_yield'] = parse_ingrendient_and_normalize(formula['form_yield'])
     if formula['form_type'] == 'Recipe':
@@ -55,6 +55,5 @@ for formula in formulae:
         formula['form_method'] = [parse_ingrendient_and_normalize(ingredient)
                                   for ingredient, _ in shapeless_ingredient_pattern.findall(formula['form_method'])]
 
-
-
+# Demonstrate the transformation
 pprint.pprint(formulae)
