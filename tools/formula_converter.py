@@ -1,5 +1,7 @@
-import re
+#!/usr/bin/env python
 import pprint
+import re
+import sys
 
 recipe_form_pattern = re.compile(r"add(?P<form_type>Recipe)\(new ItemStack(?P<form_yield>\(.*\)), new Object\[\] {(?P<form_method>.*)}\)")
 shapeless_recipe_form_pattern = re.compile(r"add(?P<form_type>ShapelessRecipe)\(new ItemStack(?P<form_yield>\(.*\)), new Object\[\] {(?P<form_method>.*)}\)")
@@ -26,14 +28,26 @@ def parse_ingrendient_and_normalize(ingredient_string):
                       'metadata': None}
     return ingredient
 
-# Load the contents of the formula extraction script into a list
-with open('formulae.txt', 'r') as extracted_formulae:
-    formulae_lines = extracted_formulae.readlines()
+# use stdin if it's full
+if not sys.stdin.isatty():
+    input_stream = sys.stdin.readlines()
 
-# Match and normalize the formula lines into a common format
+# otherwise, read the given filename
+else:
+    try:
+        input_filename = sys.argv[1]
+        with open(input_filename, 'rU') as input_file:
+            input_stream = input_file.readlines()
+    except IndexError:
+        # If that doesn't exist, load the contents of the formula extraction script into a list
+        with open('formulae.txt', 'r') as extracted_formulae:
+            input_stream = extracted_formulae.readlines()
+
+
+# Match and normalize the input stream lines into a common format
 FORMULA_MATCHERS = (recipe_form_pattern, shapeless_recipe_form_pattern, )
 formulae = []
-for formula_line in formulae_lines:
+for formula_line in input_stream:
     for formula_matcher in FORMULA_MATCHERS:
         if formula_matcher.match(formula_line):
             formulae.append(formula_matcher.match(formula_line).groupdict())
